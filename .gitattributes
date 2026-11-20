@@ -1,5 +1,23 @@
-# Auto detect text files and perform LF normalization
+# Normalize line endings for text files (code, html, css)
 * text=auto
-  *.png filter=lfs diff=lfs merge=lfs -text
-  *.psd filter=lfs diff=lfs merge=lfs -text
-  *.wav filter=lfs diff=lfs merge=lfs -text
+
+# ---------------------------------------------------------------
+# Git LFS: big binary SOURCE files only.
+# Game-ready art the website loads (PNGs in the game's assets folder)
+# stays in regular Git, because GitHub Pages and the Neocities upload
+# would otherwise publish small LFS pointer files instead of images.
+# ---------------------------------------------------------------
+
+# Everything in the artist's working folder, whatever the type
+art-source/** filter=lfs diff=lfs merge=lfs -text
+
+# Layered/working art formats, wherever they end up
+*.psd       filter=lfs diff=lfs merge=lfs -text
+*.aseprite  filter=lfs diff=lfs merge=lfs -text
+*.ase       filter=lfs diff=lfs merge=lfs -text
+*.kra       filter=lfs diff=lfs merge=lfs -text
+*.clip      filter=lfs diff=lfs merge=lfs -text
+*.procreate filter=lfs diff=lfs merge=lfs -text
+
+# Uncompressed audio masters (the game itself should load .ogg or .mp3)
+*.wav       filter=lfs diff=lfs merge=lfs -text
