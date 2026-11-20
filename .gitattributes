@@ -10,6 +10,8 @@
 
 # Everything in the artist's working folder, whatever the type
 art-source/** filter=lfs diff=lfs merge=lfs -text
+# ...except notes, which stay normal text so GitHub can show them
+art-source/**/*.md -filter -diff -merge text
 
 # Layered/working art formats, wherever they end up
 *.psd       filter=lfs diff=lfs merge=lfs -text
