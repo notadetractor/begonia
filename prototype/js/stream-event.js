@@ -49,11 +49,11 @@
         frustrationDelta: 0,
         bestPossibleEgo: best,
         unmoderatedEgo: worst,
-        negativesTotal: this.cfg.chatMix.veryNegative ? this.cfg.chatMix.veryNegative.count : 0,
+        negativesTotal: this.cfg.chatMix.negative ? this.cfg.chatMix.negative.count : 0,
         negativesCaught: 0,
         negativesMissed: 0,
         positivesDeleted: 0,
-        benignDeleted: 0,
+        neutralDeleted: 0,
       };
     }
 
@@ -147,7 +147,7 @@
       const r = this.results;
       r.egoDelta += chat.effect.ego;
       r.frustrationDelta += chat.effect.frustration;
-      if (chat.category === "veryNegative") r.negativesMissed++;
+      if (chat.category === "negative") r.negativesMissed++;
       this.emit("read", { chat, effect: chat.effect });
     }
 
@@ -156,9 +156,9 @@
       if (!this.running || !chat || chat.status !== "live") return false;
       chat.status = "deleted";
       const r = this.results;
-      if (chat.category === "veryNegative") r.negativesCaught++;
-      else if (chat.category === "veryPositive") r.positivesDeleted++;
-      else r.benignDeleted++;
+      if (chat.category === "negative") r.negativesCaught++;
+      else if (chat.category === "positive") r.positivesDeleted++;
+      else r.neutralDeleted++;
       this.emit("deleted", chat);
       return true;
     }
