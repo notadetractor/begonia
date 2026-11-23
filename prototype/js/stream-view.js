@@ -48,18 +48,61 @@
       this.setMood();
     }
 
-    // Swap placeholders for real art when the manifest has a file.
+    // Build Bill from his sprites, and swap in a background if there is one.
     applyAssets(assets) {
-      if (assets.bill_idle) {
-        const img = document.createElement("img");
-        img.src = assets.bill_idle;
-        img.alt = "SnarkGuyBill";
-        img.className = "bill-art";
-        this.bill.replaceChildren(img);
+      applyUiSkin(assets.ui);
+      const win = this.$("game-window");
+      this.$("fullscreen-button").addEventListener("click", () => {
+        try {
+          if (document.fullscreenElement) document.exitFullscreen();
+          else win.requestFullscreen().catch(() => {});
+        } catch (e) { /* fullscreen not available here */ }
+      });
+      const q = (sel) => document.querySelector(sel);
+      const layout = {
+        area: q(".os-body"),
+        header: q(".topbar"),
+        row: q(".layout"),
+        column: q(".stage-col"),
+        stageWin: q(".stage-win"),
+        below: [q(".progress"), q(".hud")],
+        chat: q(".chat"),
+      };
+      this.rig = new StreamScene(this.$("bill-canvas"), this.$("stage"), assets.bill, assets.scene, this.cfg.bill, layout, this.cfg.layout);
+    }
+
+    setStartEnabled(on, label) {
+      const btn = this.$("start-button");
+      btn.disabled = !on;
+      btn.textContent = on ? "Go live" : label || "Go live";
+    }
+
+    // Shows what was loaded from data/*.csv, and any problems found.
+    showContentReport(report) {
+      const box = this.$("content-report");
+      box.replaceChildren();
+      const add = (tag, text, cls) => {
+        const el = document.createElement(tag);
+        el.textContent = text;
+        if (cls) el.className = cls;
+        box.appendChild(el);
+        return el;
+      };
+      if (report.error) {
+        add("p", report.error, "report-error");
+        this.$("start-button").textContent = "Can't load chat";
+        return;
       }
-      if (assets.stream_background) {
-        this.$("stage").style.backgroundImage = `url("${assets.stream_background}")`;
-        this.$("stage").classList.add("has-art");
+      const c = report.counts;
+      const types = Object.keys(this.cfg.chatMix).map((t) => `${c[t]} ${t}`).join(", ");
+      add("p", `Loaded ${types} messages, ${c.usernames} usernames, ${c.lines} lines.`);
+      if (report.problems.length) {
+        const list = add("ul", "", "report-problems");
+        for (const problem of report.problems) {
+          const li = document.createElement("li");
+          li.textContent = problem;
+          list.appendChild(li);
+        }
       }
     }
 
@@ -129,10 +172,10 @@
       this.caption.classList.remove("enter");
       void this.caption.offsetWidth;
       this.caption.classList.add("enter");
-      this.bill.classList.add("talking");
+      this.rig.setTalking(true);
       clearTimeout(this.talkTimer);
       // Talk for most of the line, then pause before the next one.
-      this.talkTimer = setTimeout(() => this.bill.classList.remove("talking"), Math.min(line.seconds * 700, 3500));
+      this.talkTimer = setTimeout(() => this.rig.setTalking(false), Math.min(line.seconds * 700, 3500));
     }
 
     addChat(chat) {
@@ -199,14 +242,12 @@
     }
 
     react(kind) {
-      this.bill.classList.remove("react-pleased", "react-hurt");
-      void this.bill.offsetWidth;
-      this.bill.classList.add(`react-${kind}`);
+      this.rig.react(kind);
     }
 
     showResults(r) {
       clearTimeout(this.talkTimer);
-      this.bill.classList.remove("talking");
+      this.rig.setTalking(false);
       const badge = this.$("live-badge");
       badge.textContent = "OFFLINE";
       badge.classList.remove("is-live");
@@ -222,7 +263,7 @@
       this.$("result-missed").textContent = r.negativesMissed;
       this.$("result-frustration").textContent = signed(r.frustrationDelta);
       this.$("result-positive").textContent = r.positivesDeleted;
-      this.$("result-benign").textContent = r.benignDeleted;
+      this.$("result-neutral").textContent = r.neutralDeleted;
       this.$("result-range").textContent =
         `Perfect moderation: ${signed(r.bestPossibleEgo)} Ego · No moderation: ${signed(r.unmoderatedEgo)} Ego`;
       this.$("results-screen").hidden = false;

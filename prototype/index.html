@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SnarkGuyBill Live</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;600;700&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="desktop">
+  <!-- The whole game lives in one OS-style window. Its art comes from js/assets.js (ui). -->
+  <div class="os-window" id="game-window">
+    <div class="titlebar">
+      <span class="title-text">SnarkGuyBill Live</span>
+      <div class="title-buttons">
+        <span class="tb-btn" aria-hidden="true"></span>
+        <button class="tb-btn" id="fullscreen-button" type="button" aria-label="Toggle fullscreen" title="Toggle fullscreen"></button>
+        <span class="tb-btn" aria-hidden="true"></span>
+      </div>
+    </div>
+
+    <div class="os-body">
+      <header class="topbar">
+        <div class="channel">
+          <span class="avatar" aria-hidden="true">B</span>
+          <div class="channel-text">
+            <div class="channel-name">SnarkGuyBill</div>
+            <div class="channel-sub" id="slot-label">Day 1 · Day Stream</div>
+          </div>
+        </div>
+        <div class="live-meta">
+          <span class="live-badge" id="live-badge">OFFLINE</span>
+          <span class="viewers" id="viewers">0 followers</span>
+          <span class="clock" id="clock">1:00</span>
+        </div>
+      </header>
+
+      <main class="layout">
+        <section class="stage-col" aria-label="Stream">
+          <div class="win stage-win">
+            <div class="stage" id="stage">
+
+              <!-- The room and Bill are drawn from the art listed in js/assets.js -->
+              <div class="bill" id="bill" data-mood="smug">
+                <canvas class="bill-canvas" id="bill-canvas" role="img" aria-label="SnarkGuyBill at his streaming desk"></canvas>
+              </div>
+
+              <div class="pop-layer" id="pop-layer" aria-hidden="true"></div>
+              <p class="caption" id="caption" aria-live="polite" hidden></p>
+
+              <div class="overlay" id="start-screen">
+                <div class="win overlay-card">
+                  <p class="eyebrow">Your job: moderator</p>
+                  <h1>Keep chat nice to Bill</h1>
+                  <p>Bill goes live for 60 seconds. Delete the nasty messages before he reads them. Leave the compliments alone. He needs those.</p>
+                  <button class="btn" id="start-button" type="button">Go live</button>
+                  <div class="content-report" id="content-report" aria-live="polite"></div>
+                </div>
+              </div>
+
+              <div class="overlay" id="results-screen" hidden>
+                <div class="win overlay-card results">
+                  <p class="eyebrow">Stream over</p>
+                  <div class="result-head">
+                    <span class="result-ego" id="result-ego">0</span>
+                    <span class="result-ego-label">Ego this stream</span>
+                  </div>
+                  <p class="verdict" id="result-verdict"></p>
+                  <dl class="result-grid">
+                    <div><dt>Trolls deleted</dt><dd id="result-caught">0</dd></div>
+                    <div><dt>Trolls Bill read</dt><dd id="result-missed">0</dd></div>
+                    <div><dt>Frustration</dt><dd id="result-frustration">0</dd></div>
+                    <div><dt>Fans deleted</dt><dd id="result-positive">0</dd></div>
+                    <div><dt>Normal chat deleted</dt><dd id="result-neutral">0</dd></div>
+                  </dl>
+                  <p class="result-range" id="result-range"></p>
+                  <button class="btn" id="again-button" type="button">Run it back</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="progress" aria-hidden="true"><div class="progress-fill" id="progress-fill"></div></div>
+
+          <dl class="win hud">
+            <div class="stat"><dt>Followers</dt><dd id="stat-followers">0</dd></div>
+            <div class="stat"><dt>Money</dt><dd id="stat-money">$0</dd></div>
+            <div class="stat stat-ego"><dt>Ego</dt><dd id="stat-ego">0</dd></div>
+            <div class="stat"><dt>Trust</dt><dd id="stat-trust">0</dd></div>
+            <div class="stat stat-frustration">
+              <dt>Frustration</dt><dd id="stat-frustration">0</dd>
+              <div class="meter" aria-hidden="true"><div class="meter-fill" id="frustration-fill"></div></div>
+            </div>
+          </dl>
+        </section>
+
+        <aside class="win chat" aria-label="Stream chat">
+          <div class="chat-head">
+            <span class="chat-title">Stream chat</span>
+            <span class="mod-tag">Mod</span>
+          </div>
+          <div class="chat-body">
+            <ol class="chat-list" id="chat-list"></ol>
+            <p class="chat-empty" id="chat-empty">Chat is quiet. It won't be for long.</p>
+          </div>
+          <p class="chat-foot">Click a message to delete it. The bar shows how long until Bill reads it.</p>
+        </aside>
+      </main>
+    </div>
+  </div>
+</div>
+
+<!-- Data and settings: edit these freely -->
+<script src="js/config.js"></script>
+<script src="js/assets.js"></script>
+<!-- Chat messages, usernames and Bill's lines live in data/*.csv -->
+<!-- Game code -->
+<script src="js/content-loader.js"></script>
+<script src="js/game-state.js"></script>
+<script src="js/stream-scene.js"></script>
+<script src="js/ui-skin.js"></script>
+<script src="js/stream-event.js"></script>
+<script src="js/stream-view.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
