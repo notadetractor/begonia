@@ -13,6 +13,6 @@ A narrative management sim where you manage SnarkGuyBill, a streamer who cares o
 
 ## Play the prototype
 
-Online: `https://notadetractor.github.io/begonia/prototype/`.
+Online: `https://notadetractor.github.io/begonia/`.
 
 Locally: see `prototype/README.md`.
