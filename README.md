@@ -1,6 +1,6 @@
 # begonia
 
-A narrative management sim loosely inspired by *Needy Streamer Overload*. You manage SnarkGuyBill, a streamer who cares only about money and his ego.
+A narrative management sim where you manage SnarkGuyBill, a streamer who cares only about money and himself.
 
 ## What's in this repo
 
@@ -13,6 +13,6 @@ A narrative management sim loosely inspired by *Needy Streamer Overload*. You ma
 
 ## Play the prototype
 
-Online: `https://notadetractor.github.io/begonia/prototype/` (once GitHub Pages is turned on).
+Online: `https://notadetractor.github.io/begonia/prototype/`.
 
 Locally: see `prototype/README.md`.
